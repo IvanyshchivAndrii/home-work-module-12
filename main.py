@@ -1,6 +1,8 @@
 from collections import UserDict
 from datetime import datetime
 import re
+import pickle
+from pathlib import Path
 
 
 class AddressBook(UserDict):
@@ -217,8 +219,11 @@ def say_hallo(*args):
     print("How can I help you?")
     return ''
 
-
-PHONEBOOK = AddressBook()
+with open('PhonePook.bin', 'rb') as fh:
+    if Path('PhonePook.bin').stat().st_size != 0:
+        PHONEBOOK = pickle.load(fh)
+    else:
+        PHONEBOOK = AddressBook()
 
 
 @input_error
@@ -366,6 +371,9 @@ def main():
                 flag = False
             else:
                 print('Please, write one of the command')
+        print(PHONEBOOK)
+        with open('PhonePook.bin', 'wb') as fh:
+            pickle.dump(PHONEBOOK, fh)
     except IndexError:
         print('Enter command and values')
 
