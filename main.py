@@ -14,7 +14,6 @@ class AddressBook(UserDict):
     def add_record(self, record):
         self.data[record.name.value] = record
 
-
     def __next__(self):
         if self.counter_index < len(self.data):
             dct_keys = {key: value for key, value in enumerate(self.data.keys())}
@@ -219,6 +218,7 @@ def say_hallo(*args):
     print("How can I help you?")
     return ''
 
+
 with open('PhonePook.bin', 'rb') as fh:
     if Path('PhonePook.bin').stat().st_size != 0:
         PHONEBOOK = pickle.load(fh)
@@ -329,8 +329,17 @@ def show_all_contacts(*args):
     return ''
 
 
-def show_part(number):
-    pass
+def find_record(*args):
+    rec_list_name = [values for key, values in PHONEBOOK.items() if args[1] in key.lower() and args[1].isalpha()]
+    rec_list_num = [values for key, values in PHONEBOOK.items() if args[1] in ''.join(str(values.phones))]
+    if rec_list_name:
+        for i in rec_list_name:
+            print(i)
+    elif rec_list_num:
+        for i in rec_list_num:
+            print(i)
+    else:
+        print('Sorry contact hasn\'t been found')
 
 
 OPERATIONS = {
@@ -342,8 +351,8 @@ OPERATIONS = {
     'change': change_contact,
     'phone': show_phone,
     'show all': show_all_contacts,
-    'part': show_part,
-    'help': helper
+    'help': helper,
+    'find': find_record
 }
 
 
@@ -371,7 +380,6 @@ def main():
                 flag = False
             else:
                 print('Please, write one of the command')
-        print(PHONEBOOK)
         with open('PhonePook.bin', 'wb') as fh:
             pickle.dump(PHONEBOOK, fh)
     except IndexError:
@@ -380,4 +388,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
